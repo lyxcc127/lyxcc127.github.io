@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction">
+    <meta name="keywords" content="CVPR, 4D Avatar, Head Reconstruction, Diffusion Models, 3D Gaussian">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction">
+    <meta property="og:description" content="Novel geometry-aware diffusion framework for photorealistic 4D head avatar reconstruction from single portrait images">
+    <meta property="og:image" content="assets/teaser.png">
+
+    <title>GeoDiff4D</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Section */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.3;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .conference {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            opacity: 0.95;
+        }
+
+        .anonymous-note {
+            font-size: 1rem;
+            opacity: 0.85;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        /* Button Links */
+        .links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn.disabled:hover {
+            transform: none;
+        }
+
+        .btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        main {
+            background: white;
+            margin: -30px auto 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        section {
+            padding: 50px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #2d3748;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin: 30px 0 20px;
+            color: #4a5568;
+        }
+
+        /* Teaser Image */
+        .teaser-section {
+            text-align: center;
+            background: white;
+            padding: 50px 50px 40px;
+        }
+
+        .teaser-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Abstract */
+        .abstract p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            text-align: justify;
+        }
+
+        /* Architecture */
+        .architecture-img {
+            width: 100%;
+            margin: 25px 0 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .caption {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #6c757d;
+            line-height: 1.7;
+            text-align: justify;
+        }
+
+        /* Comparison Grid */
+        .comparison-grid {
+            display: grid;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .comparison-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .comparison-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .comparison-item video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        /* BibTeX */
+        .bibtex {
+            background: #f8f9fa;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Placeholder for images */
+        .placeholder {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            color: #667eea;
+            font-style: italic;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 30px 20px;
+            }
+
+            .teaser-section {
+                padding: 30px 20px 25px;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction</h1>
+            <p class="anonymous-note">Anonymous Submission</p>
+
+            <div class="links">
+                <a href="#" class="btn disabled">
+                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+                    Paper (Coming Soon)
+                </a>
+                <a href="#" class="btn disabled">
+                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.916 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.61-5.475 5.91.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    Code (Coming Soon)
+                </a>
+                <a href="#" class="btn disabled">
+                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 4v16h1.5V4zm5.5 0v16H16V4z"/></svg>
+                    BibTeX (Coming Soon)
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main>
+            <!-- Teaser -->
+            <section class="teaser-section">
+                <img src="assets/teaser.png" alt="GeoDiff4D Teaser" onerror="this.parentElement.innerHTML='<div class=\'placeholder\'>Teaser Image: assets/teaser.png<br>Please ensure the image is uploaded to the assets folder</div>'">
+            </section>
+
+            <!-- Abstract -->
+            <section class="abstract">
+                <h2>Abstract</h2>
+                <p>
+                    Reconstructing photorealistic and animatable 4D head avatars from a single portrait image remains a fundamental challenge in computer vision. While diffusion models have enabled remarkable progress in image and video generation for avatar reconstruction, existing methods primarily rely on 2D priors and struggle to achieve consistent 3D geometry. We propose a novel framework that leverages geometry-aware diffusion to distill strong geometry priors for high-fidelity head avatar reconstruction. Our approach jointly synthesizes portrait images and corresponding surface normals, while a pose-free expression encoder captures implicit expression representations. Both synthesized images and expression latents are distilled into 3D Gaussian-based avatars, enabling photorealistic rendering with accurate geometry. Extensive experiments demonstrate that our method substantially outperforms state-of-the-art approaches in visual quality, expression fidelity, and cross-identity generalization, while supporting real-time rendering.
+                </p>
+            </section>
+
+            <!-- Architecture -->
+            <section>
+                <h2>Method Overview</h2>
+                <img src="assets/architecture.png"
+                     alt="GeoDiff4D Architecture"
+                     class="architecture-img"
+                     onerror="this.parentElement.querySelector('.architecture-img').outerHTML='<div class=\'placeholder\'>Architecture Diagram: assets/architecture.png<br>Please ensure the image is uploaded to the assets folder</div>'">
+                <p class="caption">
+                    <strong>Overall architecture.</strong> Our system takes a reference image, driving expressions, and head poses as input. Specifically, the reference image is encoded into hierarchical identity embeddings using a pretrained VAE and UNet-based reference network. Driving expressions are compressed into low-dimensional latents via a pose-free expression encoder. Both embeddings are injected into the diffusion model through cross-attention, while head pose maps concatenated with noise serve as inputs. The model then jointly predicts portrait images and surface normals. For 3D reconstruction, a UNet refines FLAME meshes using expression latents through cross-attention, and an MLP captures Gaussian dynamics. Finally, the generated surface normals provide additional geometric supervision that further enhances the reconstruction fidelity.
+                </p>
+            </section>
+
+            <!-- Comparisons -->
+            <section>
+                <h2>Qualitative Comparisons</h2>
+
+                <h3>Self-Reenactment</h3>
+                <p style="margin-bottom: 20px; color: #4a5568;">
+                    We compare our method with state-of-the-art approaches on self-reenactment tasks, where the source and driving identities are the same. Our method produces more accurate geometry and higher-fidelity facial details.
+                </p>
+                <div class="comparison-grid">
+                    <div class="comparison-item">
+                        <img src="assets/comparison_self_1.png" alt="Self-Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 1<br>assets/comparison_self_1.png</div>'">
+                    </div>
+                    <div class="comparison-item">
+                        <img src="assets/comparison_self_2.png" alt="Self-Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 2<br>assets/comparison_self_2.png</div>'">
+                    </div>
+                </div>
+
+                <h3>Cross-Identity Reenactment</h3>
+                <p style="margin-bottom: 20px; color: #4a5568;">
+                    For cross-identity reenactment, where expressions from one person are transferred to another, our geometry-aware approach maintains identity consistency while accurately capturing expression dynamics.
+                </p>
+                <div class="comparison-grid">
+                    <div class="comparison-item">
+                        <img src="assets/comparison_cross_1.png" alt="Cross-Identity Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 1<br>assets/comparison_cross_1.png</div>'">
+                    </div>
+                    <div class="comparison-item">
+                        <img src="assets/comparison_cross_2.png" alt="Cross-Identity Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 2<br>assets/comparison_cross_2.png</div>'">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Video Results (Optional) -->
+            <section>
+                <h2>Video Results</h2>
+                <p style="margin-bottom: 20px; color: #4a5568;">
+                    Dynamic visualization of our 4D head avatar reconstruction and animation results.
+                </p>
+                <div class="video-grid">
+                    <video controls>
+                        <source src="assets/video_demo_1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <video controls>
+                        <source src="assets/video_demo_2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <p class="caption" style="text-align: center;">
+                    Real-time rendering of our reconstructed 4D head avatars with various expressions and poses.
+                </p>
+            </section>
+
+            <!-- BibTeX -->
+            <section class="bibtex" id="bibtex">
+                <h2>Citation</h2>
+                <p style="margin-bottom: 15px;">Citation information will be available after publication.</p>
+            </section>
+
+            <!-- Acknowledgements -->
+            <section>
+                <h2>Acknowledgements</h2>
+                <p>
+                    We thank the reviewers for their valuable feedback.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Anonymous Submission. All rights reserved.</p>
+    </footer>
+</body>
+</html>
