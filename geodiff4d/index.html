@@ -394,8 +394,10 @@
             <!-- gallery -->
             <section>
                 <h2>Gallery</h2>
+
+                <h3>Geometry-aware Diffusion Model</h3>
                 <p style="margin-bottom: 20px; color: #4a5568;">
-                    Our method generates high-quality 4D head avatars with accurate geometry. The video below shows the complete pipeline from reference image to final results with both RGB and normal outputs.
+                    Our geometry-aware video generation model can simultaneously generate high-fidelity portrait videos and detailed surface normals, supporting reference images with large head poses and driving images with exaggerated expressions.
                 </p>
 
                 <div class="video-with-labels">
@@ -410,50 +412,54 @@
                     </div>
                 </div>
 
+                <h3>4D Head Avatar</h3>
+                <p style="margin-bottom: 20px; color: #4a5568;">
+                    GeoDiff4D can generate vivid and realistic 4D head avatars from various single reference images, including real people and cartoon characters.
+                    Coming soon.
+                </p>
                 <div class="gallery-grid" style="margin-top: 40px;">
                     <div class="gallery-item">
-                        <img src="assets/ret2.png" alt="Gallery 2" onerror="this.outerHTML='<div class=\'placeholder\'>Additional Gallery Example<br>assets/ret2.png</div>'">
-                    </div>
-                </div>
-
-            </section>
-
-            <!-- Comparisons -->
-            <section>
-                <h2>Comparisons</h2>
-
-                <h3>Self-Reenactment</h3>
-                <p style="margin-bottom: 20px; color: #4a5568;">
-                    We compare our method with state-of-the-art approaches on self-reenactment tasks, where the source and driving identities are the same. Our method produces more accurate geometry and higher-fidelity facial details.
-                </p>
-                <div class="comparison-grid">
-                    <div class="comparison-item">
-                        <img src="assets/comparison_self_1.png" alt="Self-Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 1<br>assets/comparison_self_1.png</div>'">
-                    </div>
-                    <div class="comparison-item">
-                        <img src="assets/comparison_self_2.png" alt="Self-Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 2<br>assets/comparison_self_2.png</div>'">
-                    </div>
-                </div>
-
-                <h3>Cross-Identity Reenactment</h3>
-                <p style="margin-bottom: 20px; color: #4a5568;">
-                    For cross-identity reenactment, where expressions from one person are transferred to another, our geometry-aware approach maintains identity consistency while accurately capturing expression dynamics.
-                </p>
-                <div class="comparison-grid">
-                    <div class="comparison-item">
-                        <img src="assets/comparison_cross_1.png" alt="Cross-Identity Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 1<br>assets/comparison_cross_1.png</div>'">
-                    </div>
-                    <div class="comparison-item">
-                        <img src="assets/comparison_cross_2.png" alt="Cross-Identity Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 2<br>assets/comparison_cross_2.png</div>'">
+                        <img src="assets/gallery-gs.webp" alt="Gallery Animation" onerror="this.outerHTML='<div class=\'placeholder\'>Additional Gallery Example<br>coming soon</div>'">
                     </div>
                 </div>
             </section>
+
+<!--            &lt;!&ndash; Comparisons &ndash;&gt;-->
+<!--            <section>-->
+<!--                <h2>Comparisons</h2>-->
+
+<!--                <h3>Self-Reenactment</h3>-->
+<!--                <p style="margin-bottom: 20px; color: #4a5568;">-->
+<!--                    We compare our method with state-of-the-art approaches on self-reenactment tasks, where the source and driving identities are the same. Our method produces higher-fidelity facial details.-->
+<!--                </p>-->
+<!--                <div class="comparison-grid">-->
+<!--                    <div class="comparison-item">-->
+<!--                        <img src="assets/comparison_self_1.png" alt="Self-Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 1<br>assets/comparison_self_1.png</div>'">-->
+<!--                    </div>-->
+<!--                    <div class="comparison-item">-->
+<!--                        <img src="assets/comparison_self_2.png" alt="Self-Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 2<br>assets/comparison_self_2.png</div>'">-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <h3>Cross-Identity Reenactment</h3>-->
+<!--                <p style="margin-bottom: 20px; color: #4a5568;">-->
+<!--                    For cross-identity reenactment, where expressions from one person are transferred to another, our geometry-aware approach maintains identity consistency while accurately capturing expression dynamics.-->
+<!--                </p>-->
+<!--                <div class="comparison-grid">-->
+<!--                    <div class="comparison-item">-->
+<!--                        <img src="assets/comparison_cross_1.png" alt="Cross-Identity Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 1<br>assets/comparison_cross_1.png</div>'">-->
+<!--                    </div>-->
+<!--                    <div class="comparison-item">-->
+<!--                        <img src="assets/comparison_cross_2.png" alt="Cross-Identity Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 2<br>assets/comparison_cross_2.png</div>'">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </section>-->
 
             <!-- Acknowledgements -->
             <section>
                 <h2>Acknowledgements</h2>
                 <p>
-                    We thank the authors of the following open-source projects for making their code publicly available:
+                    We thank the authors of the following open-source projects for making their code or datasets publicly available:
                     <a href="https://github.com/ShenhanQian/GaussianAvatars" target="_blank">GaussianAvatars</a>,
                     <a href="https://github.com/felixtaubner/cap4d" target="_blank">CAP4D</a>,
                     <a href="https://github.com/SimonGiebenhain/pixel3dmm" target="_blank">Pixel3DMM</a>,
@@ -461,7 +467,7 @@
                     <a href="https://github.com/tobias-kirschstein/nersemble-data" target="_blank">NeRSemble</a>,
                     <a href="https://github.com/RenderMe-360/RenderMe-360" target="_blank">RenderMe-360</a>, and
                     <a href="https://github.com/microsoft/DAViD" target="_blank">DAViD</a>.
-                    We are also grateful to the creators of the datasets used in our experiments.
+                    We are also grateful to the corresponding authors and participants for their valuable contributions.
                 </p>
             </section>
 
