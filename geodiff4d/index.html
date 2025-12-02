@@ -282,6 +282,64 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .comparison-item video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* 👇 在这里添加下面的新CSS代码 👇 */
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .gallery-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Video with labels */
+        .video-with-labels {
+            margin-top: 20px;
+        }
+
+        .video-labels {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .video-label {
+            text-align: center;
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.95rem;
+            padding: 8px;
+            background: #e9ecef;
+            border-radius: 6px;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -338,15 +396,24 @@
             <section>
                 <h2>Gallery</h2>
                 <p style="margin-bottom: 20px; color: #4a5568;">
-                    We compare our method with state-of-the-art approaches on self-reenactment tasks, where the source and driving identities are the same. Our method produces more accurate geometry and higher-fidelity facial details.
+                    Our method generates high-quality 4D head avatars with accurate geometry. The video below shows the complete pipeline from reference image to final results with both RGB and normal outputs.
                 </p>
 
-                <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <img src="assets/ret1.png" alt="Gallery 1" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 1<br>assets/comparison_self_1.png</div>'">
+                <div class="video-with-labels">
+                    <div class="video-labels">
+                        <div class="video-label">Reference Image</div>
+                        <div class="video-label">Driving Image</div>
+                        <div class="video-label">Generated RGB</div>
+                        <div class="video-label">Generated Normal</div>
                     </div>
+                    <div class="video-container">
+                        <video src="assets/gallery-vgm.webp" autoplay loop muted playsinline alt="Gallery Video" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Video: assets/gallery-vgm.webp<br>Please ensure the video is uploaded to the assets folder</div>'"></video>
+                    </div>
+                </div>
+
+                <div class="gallery-grid" style="margin-top: 40px;">
                     <div class="gallery-item">
-                        <img src="assets/ret2.png" alt="Gallery 2" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 2<br>assets/comparison_self_2.png</div>'">
+                        <img src="assets/ret2.png" alt="Gallery 2" onerror="this.outerHTML='<div class=\'placeholder\'>Additional Gallery Example<br>assets/ret2.png</div>'">
                     </div>
                 </div>
 
@@ -383,24 +450,32 @@
                 </div>
             </section>
 
+            <!-- Acknowledgements -->
+            <section>
+                <h2>Acknowledgements</h2>
+                <p>
+                    We thank the authors of the following open-source projects for making their code publicly available:
+                    <a href="https://github.com/ShenhanQian/GaussianAvatars" target="_blank">GaussianAvatars</a>,
+                    <a href="https://github.com/felixtaubner/cap4d" target="_blank">CAP4D</a>,
+                    <a href="https://github.com/SimonGiebenhain/pixel3dmm" target="_blank">Pixel3DMM</a>,
+                    <a href="https://github.com/ShenhanQian/VHAP" target="_blank">VHAP</a>,
+                    <a href="https://github.com/tobias-kirschstein/nersemble-data" target="_blank">NeRSemble</a>,
+                    <a href="https://github.com/RenderMe-360/RenderMe-360" target="_blank">RenderMe-360</a>, and
+                    <a href="https://github.com/microsoft/DAViD" target="_blank">DAViD</a>.
+                    We are also grateful to the creators of the datasets used in our experiments.
+                </p>
+            </section>
+
             <!-- BibTeX -->
             <section class="bibtex" id="bibtex">
                 <h2>Citation</h2>
                 <p style="margin-bottom: 15px;">Citation information will be available after publication.</p>
             </section>
-
-            <!-- Acknowledgements -->
-            <section>
-                <h2>Acknowledgements</h2>
-                <p>
-                    ...
-                </p>
-            </section>
         </main>
     </div>
 
     <footer>
-        <p>&copy; 2025 Anonymous Submission. All rights reserved.</p>
+        <p>&copy; 2025. All rights reserved.</p>
     </footer>
 </body>
 </html>
