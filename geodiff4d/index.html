@@ -332,14 +332,7 @@
             border-radius: 6px;
         }
 
-        .video-container video {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .video-container img {
+        .media-container img {
             width: 100%;
             height: auto;
             border-radius: 8px;
@@ -413,7 +406,7 @@
                         <div class="video-label">Generated Normal</div>
                     </div>
                     <div class="video-container">
-                        <video src="assets/gallery-vgm.webp" autoplay loop muted playsinline alt="Gallery Video" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Video: assets/gallery-vgm.webp<br>Please ensure the video is uploaded to the assets folder</div>'"></video>
+                        <img src="assets/gallery-vgm.webp" alt="Gallery Animation" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-vgm.webp<br>File not found. Please check:<br>1. File is in assets/ folder<br>2. Filename is exactly gallery-vgm.webp<br>3. Or convert to .mp4 format for video</div>'">
                     </div>
                 </div>
 
