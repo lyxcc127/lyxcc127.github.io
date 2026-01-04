@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction">
-    <meta name="keywords" content="CVPR, 4D Avatar, Head Reconstruction, Diffusion Models, 3D Gaussian">
+<!--    <meta name="keywords" content="CVPR, 4D Avatar, Head Reconstruction, Diffusion Models, 3D Gaussian">-->
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction">
@@ -186,6 +186,101 @@
             text-align: justify;
         }
 
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .carousel-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            flex-shrink: 0;
+        }
+
+        .carousel-item img,
+        .carousel-item video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: block;
+        }
+
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .carousel-arrow {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .carousel-arrow:hover {
+            background: #764ba2;
+            transform: scale(1.1);
+        }
+
+        .carousel-arrow:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .carousel-arrow:disabled:hover {
+            transform: none;
+            background: #667eea;
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 10px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e0;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 0;
+        }
+
+        .carousel-dot.active {
+            background: #667eea;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .carousel-dot:hover {
+            background: #a0aec0;
+        }
+
         /* Comparison Grid */
         .comparison-grid {
             display: grid;
@@ -264,32 +359,6 @@
             font-style: italic;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-
-            section {
-                padding: 30px 20px;
-            }
-
-            .teaser-section {
-                padding: 30px 20px 25px;
-            }
-
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .comparison-item video {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
         /* Gallery Grid */
         .gallery-grid {
             display: grid;
@@ -339,13 +408,36 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             display: block;
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            section {
+                padding: 30px 20px;
+            }
+
+            .teaser-section {
+                padding: 30px 20px 25px;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-labels {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
             <h1>GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction</h1>
-            <p class="anonymous-note">Anonymous Submission</p>
+<!--            <p class="anonymous-note">Anonymous Submission</p>-->
 
             <div class="links">
                 <a href="#" class="btn disabled">
@@ -356,9 +448,9 @@
                     <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.916 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.61-5.475 5.91.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
                     Code (Coming Soon)
                 </a>
-                <a href="#" class="btn disabled">
+                <a href="#bibtex" class="btn">
                     <svg fill="currentColor" viewBox="0 0 24 24"><path d="M9 4v16h1.5V4zm5.5 0v16H16V4z"/></svg>
-                    BibTeX (Coming Soon)
+                    BibTeX
                 </a>
             </div>
         </div>
@@ -369,14 +461,6 @@
             <!-- Teaser -->
             <section class="teaser-section">
                 <img src="assets/teaser.png" alt="GeoDiff4D Teaser" onerror="this.parentElement.innerHTML='<div class=\'placeholder\'>Teaser Image: assets/teaser.png<br>Please ensure the image is uploaded to the assets folder</div>'">
-            </section>
-
-            <!-- Abstract -->
-            <section class="abstract">
-                <h2>Abstract</h2>
-                <p>
-                    Reconstructing photorealistic and animatable 4D head avatars from a single portrait image remains a fundamental challenge in computer vision. While diffusion models have enabled remarkable progress in image and video generation for avatar reconstruction, existing methods primarily rely on 2D priors and struggle to achieve consistent 3D geometry. We propose a novel framework that leverages geometry-aware diffusion to distill strong geometry priors for high-fidelity head avatar reconstruction. Our approach jointly synthesizes portrait images and corresponding surface normals, while a pose-free expression encoder captures implicit expression representations. Both synthesized images and expression latents are distilled into 3D Gaussian-based avatars, enabling photorealistic rendering with accurate geometry. Extensive experiments demonstrate that our method substantially outperforms state-of-the-art approaches in visual quality, expression fidelity, and cross-identity generalization, while supporting real-time rendering.
-                </p>
             </section>
 
             <!-- Architecture -->
@@ -395,7 +479,7 @@
             <section>
                 <h2>Gallery</h2>
 
-                <h3>Geometry-aware Diffusion Model</h3>
+                <h3>Geometry-Aware Diffusion Model</h3>
                 <p style="margin-bottom: 20px; color: #4a5568;">
                     Our geometry-aware video generation model can simultaneously generate high-fidelity portrait videos and detailed surface normals, supporting reference images with large head poses and driving images with exaggerated expressions.
                 </p>
@@ -414,43 +498,81 @@
 
                 <h3>4D Head Avatar</h3>
                 <p style="margin-bottom: 20px; color: #4a5568;">
-                    GeoDiff4D can generate vivid and realistic 4D head avatars from various single reference images, including real people and cartoon characters.
-                    Coming soon.
+                    GeoDiff4D can generate vivid and high-quality 4D head avatars from single reference images, even when the reference exhibits large head pose variations and exaggerated facial expressions, covering a wide range of styles including but not limited to real humans and cartoon characters.
                 </p>
-                <div class="gallery-grid" style="margin-top: 40px;">
+                <div class="gallery-grid" style="margin-top: 10px;">
                     <div class="gallery-item">
-                        <img src="assets/gallery-gs.webp" alt="Gallery Animation" onerror="this.outerHTML='<div class=\'placeholder\'>Additional Gallery Example<br>coming soon</div>'">
+                        <img src="assets/gallery-gs.webp" alt="Gallery Animation" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.outerHTML='<div class=\'placeholder\'>4D Avatar Gallery<br>assets/gallery-gs.webp</div>'">
+                    </div>
+                </div>
+                <div class="gallery-grid" style="margin-top: 10px;">
+                    <div class="gallery-item">
+                        <img src="assets/gallery-wild.webp" alt="Gallery Animation" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.outerHTML='<div class=\'placeholder\'>4D Avatar Gallery<br>assets/gallery-wild.webp</div>'">
                     </div>
                 </div>
             </section>
 
-<!--            &lt;!&ndash; Comparisons &ndash;&gt;-->
+            <!-- Comparisons with Carousel -->
 <!--            <section>-->
 <!--                <h2>Comparisons</h2>-->
 
 <!--                <h3>Self-Reenactment</h3>-->
 <!--                <p style="margin-bottom: 20px; color: #4a5568;">-->
-<!--                    We compare our method with state-of-the-art approaches on self-reenactment tasks, where the source and driving identities are the same. Our method produces higher-fidelity facial details.-->
+<!--                    We compare our method with state-of-the-art approaches on self-reenactment tasks. Click the arrows to view different comparison examples.-->
 <!--                </p>-->
-<!--                <div class="comparison-grid">-->
-<!--                    <div class="comparison-item">-->
-<!--                        <img src="assets/comparison_self_1.png" alt="Self-Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 1<br>assets/comparison_self_1.png</div>'">-->
+
+<!--                <div class="carousel-container">-->
+<!--                    <div class="carousel-wrapper">-->
+<!--                        <div class="carousel-track" id="selfCarouselTrack">-->
+<!--                            &lt;!&ndash; Carousel Item 1 &ndash;&gt;-->
+<!--                            <div class="carousel-item">-->
+<!--                                <img src="assets/comparison_self_1.png" alt="Self-Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Example 1<br>assets/comparison_self_1.png</div>'">-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Carousel Item 2 &ndash;&gt;-->
+<!--                            <div class="carousel-item">-->
+<!--                                <img src="assets/comparison_self_2.png" alt="Self-Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Example 2<br>assets/comparison_self_2.png</div>'">-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Carousel Item 3 &ndash;&gt;-->
+<!--                            <div class="carousel-item">-->
+<!--                                <img src="assets/comparison_self_3.png" alt="Self-Reenactment Comparison 3" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Example 3<br>assets/comparison_self_3.png</div>'">-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Add more items as needed &ndash;&gt;-->
+<!--                        </div>-->
 <!--                    </div>-->
-<!--                    <div class="comparison-item">-->
-<!--                        <img src="assets/comparison_self_2.png" alt="Self-Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Comparison 2<br>assets/comparison_self_2.png</div>'">-->
+<!--                    <div class="carousel-nav">-->
+<!--                        <button class="carousel-arrow" onclick="moveCarousel('self', -1)">‹</button>-->
+<!--                        <div class="carousel-dots" id="selfCarouselDots"></div>-->
+<!--                        <button class="carousel-arrow" onclick="moveCarousel('self', 1)">›</button>-->
 <!--                    </div>-->
 <!--                </div>-->
 
 <!--                <h3>Cross-Identity Reenactment</h3>-->
 <!--                <p style="margin-bottom: 20px; color: #4a5568;">-->
-<!--                    For cross-identity reenactment, where expressions from one person are transferred to another, our geometry-aware approach maintains identity consistency while accurately capturing expression dynamics.-->
+<!--                    For cross-identity reenactment, our geometry-aware approach maintains identity consistency while accurately capturing expression dynamics.-->
 <!--                </p>-->
-<!--                <div class="comparison-grid">-->
-<!--                    <div class="comparison-item">-->
-<!--                        <img src="assets/comparison_cross_1.png" alt="Cross-Identity Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 1<br>assets/comparison_cross_1.png</div>'">-->
+
+<!--                <div class="carousel-container">-->
+<!--                    <div class="carousel-wrapper">-->
+<!--                        <div class="carousel-track" id="crossCarouselTrack">-->
+<!--                            &lt;!&ndash; Carousel Item 1 &ndash;&gt;-->
+<!--                            <div class="carousel-item">-->
+<!--                                <img src="assets/comparison_cross_1.png" alt="Cross-Identity Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Example 1<br>assets/comparison_cross_1.png</div>'">-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Carousel Item 2 &ndash;&gt;-->
+<!--                            <div class="carousel-item">-->
+<!--                                <img src="assets/comparison_cross_2.png" alt="Cross-Identity Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Example 2<br>assets/comparison_cross_2.png</div>'">-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Carousel Item 3 &ndash;&gt;-->
+<!--                            <div class="carousel-item">-->
+<!--                                <img src="assets/comparison_cross_3.png" alt="Cross-Identity Reenactment Comparison 3" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Example 3<br>assets/comparison_cross_3.png</div>'">-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; Add more items as needed &ndash;&gt;-->
+<!--                        </div>-->
 <!--                    </div>-->
-<!--                    <div class="comparison-item">-->
-<!--                        <img src="assets/comparison_cross_2.png" alt="Cross-Identity Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Reenactment Comparison 2<br>assets/comparison_cross_2.png</div>'">-->
+<!--                    <div class="carousel-nav">-->
+<!--                        <button class="carousel-arrow" onclick="moveCarousel('cross', -1)">‹</button>-->
+<!--                        <div class="carousel-dots" id="crossCarouselDots"></div>-->
+<!--                        <button class="carousel-arrow" onclick="moveCarousel('cross', 1)">›</button>-->
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </section>-->
@@ -482,5 +604,89 @@
     <footer>
         <p>&copy; 2025. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Carousel state
+        const carousels = {
+            self: { currentIndex: 0, itemCount: 0 },
+            cross: { currentIndex: 0, itemCount: 0 }
+        };
+
+        // Initialize carousels
+        function initCarousel(type) {
+            const track = document.getElementById(`${type}CarouselTrack`);
+            const dotsContainer = document.getElementById(`${type}CarouselDots`);
+            const items = track.querySelectorAll('.carousel-item');
+
+            carousels[type].itemCount = items.length;
+
+            // Create dots
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < items.length; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot';
+                if (i === 0) dot.classList.add('active');
+                dot.onclick = () => goToSlide(type, i);
+                dotsContainer.appendChild(dot);
+            }
+
+            updateCarousel(type);
+        }
+
+        // Move carousel
+        function moveCarousel(type, direction) {
+            const state = carousels[type];
+            state.currentIndex += direction;
+
+            // Loop around
+            if (state.currentIndex < 0) {
+                state.currentIndex = state.itemCount - 1;
+            } else if (state.currentIndex >= state.itemCount) {
+                state.currentIndex = 0;
+            }
+
+            updateCarousel(type);
+        }
+
+        // Go to specific slide
+        function goToSlide(type, index) {
+            carousels[type].currentIndex = index;
+            updateCarousel(type);
+        }
+
+        // Update carousel position and dots
+        function updateCarousel(type) {
+            const state = carousels[type];
+            const track = document.getElementById(`${type}CarouselTrack`);
+            const dots = document.querySelectorAll(`#${type}CarouselDots .carousel-dot`);
+
+            // Move track
+            track.style.transform = `translateX(-${state.currentIndex * 100}%)`;
+
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === state.currentIndex);
+            });
+        }
+
+        // Initialize both carousels on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initCarousel('self');
+            initCarousel('cross');
+        });
+
+        // Optional: Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                // Move both carousels left
+                moveCarousel('self', -1);
+                moveCarousel('cross', -1);
+            } else if (e.key === 'ArrowRight') {
+                // Move both carousels right
+                moveCarousel('self', 1);
+                moveCarousel('cross', 1);
+            }
+        });
+    </script>
 </body>
 </html>
