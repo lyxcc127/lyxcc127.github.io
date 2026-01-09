@@ -4,15 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction">
-<!--    <meta name="keywords" content="CVPR, 4D Avatar, Head Reconstruction, Diffusion Models, 3D Gaussian">-->
-
-    <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction">
     <meta property="og:description" content="Novel geometry-aware diffusion framework for photorealistic 4D head avatar reconstruction from single portrait images">
     <meta property="og:image" content="assets/teaser.png">
-
     <title>GeoDiff4D</title>
-
     <style>
         * {
             margin: 0;
@@ -33,7 +28,6 @@
             padding: 0 20px;
         }
 
-        /* Header Section */
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -51,21 +45,6 @@
             margin-right: auto;
         }
 
-        .conference {
-            font-size: 1.3rem;
-            font-weight: 500;
-            margin-bottom: 20px;
-            opacity: 0.95;
-        }
-
-        .anonymous-note {
-            font-size: 1rem;
-            opacity: 0.85;
-            font-style: italic;
-            margin-bottom: 30px;
-        }
-
-        /* Button Links */
         .links {
             display: flex;
             gap: 15px;
@@ -107,7 +86,6 @@
             height: 20px;
         }
 
-        /* Main Content */
         main {
             background: white;
             margin: -30px auto 40px;
@@ -149,7 +127,6 @@
             color: #4a5568;
         }
 
-        /* Teaser Image */
         .teaser-section {
             text-align: center;
             background: white;
@@ -163,14 +140,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        /* Abstract */
-        .abstract p {
-            font-size: 1.1rem;
-            line-height: 1.9;
-            text-align: justify;
-        }
-
-        /* Architecture */
         .architecture-img {
             width: 100%;
             margin: 25px 0 15px;
@@ -186,7 +155,7 @@
             text-align: justify;
         }
 
-        /* Carousel Styles */
+        /* 主要修改部分 - 视频容器和标签定位 */
         .carousel-container {
             position: relative;
             margin-top: 30px;
@@ -195,25 +164,155 @@
         .carousel-wrapper {
             overflow: hidden;
             position: relative;
+            width: 100%;
+            border-radius: 8px;
+            background: #f8f9fa;
+            padding: 20px 0;
         }
 
         .carousel-track {
             display: flex;
-            transition: transform 0.5s ease;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .carousel-item {
             min-width: 100%;
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
 
-        .carousel-item img,
-        .carousel-item video {
+        .video-with-overlay-labels {
             width: 100%;
-            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-container-overlay {
+            width: 100%;
+            max-width: 1024px;
+            position: relative;
+            overflow: hidden;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #000;
+            margin: 0 auto;
+        }
+
+        .video-container-overlay video {
+            width: 100%;
+            height: auto;
             display: block;
+            border-radius: 8px;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        /* 覆盖标签容器 - 绝对定位在视频上方 */
+        .overlay-labels {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* 标签样式 */
+        .overlay-label {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-sizing: border-box;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        /* 重新计算位置 - 基于2048x1536尺寸，每个块512x512 */
+        /* 视频尺寸: 宽度2048px, 高度1536px */
+        /* 块尺寸: 512px x 512px */
+
+        /* 第一行: 2个块 */
+        /* 总宽度: 2 * 512 = 1024px */
+        /* 居中: (2048 - 1024) / 2 = 512px 左边距 */
+        /* 每个块在视频中的位置百分比计算:
+           left = (左边距 + 块索引 * 512) / 2048 * 100%
+           top = 0 / 1536 * 100% = 0%
+        */
+
+        /* 第一行: Reference Image */
+        .label-0 {
+            top: 0%; /* 0 / 1536 = 0% */
+            left: 25%; /* 512 / 2048 = 25% */
+        }
+
+        /* 第一行: Driving Image */
+        .label-1 {
+            top: 0%;
+            left: 50%; /* (512 + 512) / 2048 = 1024 / 2048 = 50% */
+        }
+
+        /* 第二行: 3个块 */
+        /* 总宽度: 3 * 512 = 1536px */
+        /* 居中: (2048 - 1536) / 2 = 256px 左边距 */
+        /* top = 512 / 1536 * 100% = 33.333% */
+
+        /* 第二行: Ours (VGM) */
+        .label-2 {
+            top: 33.333%; /* 512 / 1536 = 33.333% */
+            left: 12.5%; /* 256 / 2048 = 12.5% */
+        }
+
+        /* 第二行: Ours (Normal) */
+        .label-3 {
+            top: 33.333%;
+            left: 37.5%; /* (256 + 512) / 2048 = 768 / 2048 = 37.5% */
+        }
+
+        /* 第二行: Ours (GeoDiff4D) */
+        .label-4 {
+            top: 33.333%;
+            left: 62.5%; /* (256 + 1024) / 2048 = 1280 / 2048 = 62.5% */
+        }
+
+        /* 第三行: 4个块 */
+        /* 总宽度: 4 * 512 = 2048px */
+        /* 居中: (2048 - 2048) / 2 = 0px 左边距 */
+        /* top = 1024 / 1536 * 100% = 66.667% */
+
+        /* 第三行: GAGAvatar */
+        .label-5 {
+            top: 66.667%; /* 1024 / 1536 = 66.667% */
+            left: 0%; /* 0 / 2048 = 0% */
+        }
+
+        /* 第三行: Portrait4D-v2 */
+        .label-6 {
+            top: 66.667%;
+            left: 25%; /* 512 / 2048 = 25% */
+        }
+
+        /* 第三行: LAM */
+        .label-7 {
+            top: 66.667%;
+            left: 50%; /* 1024 / 2048 = 50% */
+        }
+
+        /* 第三行: CAP4D */
+        .label-8 {
+            top: 66.667%;
+            left: 75%; /* 1536 / 2048 = 75% */
         }
 
         .carousel-nav {
@@ -264,124 +363,42 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: #cbd5e0;
             border: none;
+            background: #ddd;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background 0.3s;
             padding: 0;
         }
 
         .carousel-dot.active {
             background: #667eea;
-            width: 30px;
-            border-radius: 5px;
         }
 
-        .carousel-dot:hover {
-            background: #a0aec0;
-        }
-
-        /* Comparison Grid */
-        .comparison-grid {
-            display: grid;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .comparison-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .comparison-item img {
+        .video-container {
             width: 100%;
-            height: auto;
+            max-width: 1024px;
+            position: relative;
+            overflow: hidden;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: #000;
+            margin: 0 auto;
         }
 
-        .comparison-item video {
+        .video-container video {
             width: 100%;
             height: auto;
+            display: block;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-height: 80vh;
+            object-fit: contain;
         }
 
-        /* Video Grid */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        /* BibTeX */
-        .bibtex {
-            background: #f8f9fa;
-        }
-
-        pre {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #6c757d;
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: #667eea;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Placeholder for images */
-        .placeholder {
-            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
-            border: 2px dashed #667eea;
-            border-radius: 8px;
-            padding: 40px;
-            text-align: center;
-            color: #667eea;
-            font-style: italic;
-        }
-
-        /* Gallery Grid */
-        .gallery-grid {
-            display: grid;
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .gallery-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Video with labels */
         .video-with-labels {
             margin-top: 20px;
+            max-width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .video-labels {
@@ -401,15 +418,65 @@
             border-radius: 6px;
         }
 
-        .media-container img {
+        .bibtex {
+            background: #f8f9fa;
+        }
+
+        pre {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .placeholder {
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            color: #667eea;
+            font-style: italic;
+        }
+
+        .gallery-grid {
+            display: grid;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .gallery-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .gallery-item img {
             width: 100%;
             height: auto;
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            display: block;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -423,12 +490,39 @@
                 padding: 30px 20px 25px;
             }
 
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
-
             .video-labels {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .video-container video,
+            .video-container-overlay video {
+                max-height: 60vh;
+            }
+
+            /* 在移动设备上调整标签大小 */
+            .overlay-label {
+                font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+
+            .carousel-item {
+                padding: 0 10px;
+            }
+
+            .carousel-wrapper {
+                padding: 15px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .overlay-label {
+                font-size: 0.65rem;
+                padding: 3px 6px;
+            }
+
+            .video-container video,
+            .video-container-overlay video {
+                max-height: 50vh;
             }
         }
     </style>
@@ -437,7 +531,6 @@
     <header>
         <div class="container">
             <h1>GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction</h1>
-<!--            <p class="anonymous-note">Anonymous Submission</p>-->
 
             <div class="links">
                 <a href="#" class="btn disabled">
@@ -492,7 +585,7 @@
                         <div class="video-label">Generated Normal</div>
                     </div>
                     <div class="video-container">
-                        <video src="assets/gallery-vgm.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-vgm.webm<br>File not found. Please check:<br>1. File is in assets/ folder<br>2. Filename is exactly gallery-vgm.webm</div>'"></video>
+                        <video src="assets/gallery-vgm.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px;" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-vgm.webm<br>File not found. Please check:<br>1. File is in assets/ folder<br>2. Filename is exactly gallery-vgm.webm</div>'"></video>
                     </div>
                 </div>
 
@@ -502,14 +595,256 @@
                 </p>
                 <div class="gallery-grid" style="margin-top: 10px;">
                     <div class="video-container">
-                        <video src="assets/gallery-gs.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-vgm.webm<br>File not found. Please check:<br>1. File is in assets/ folder<br>2. Filename is exactly gallery-vgm.webm</div>'"></video>
+                        <video src="assets/gallery-gs.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px;" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-gs.webm<br>File not found</div>'"></video>
                     </div>
                 </div>
                 <div class="gallery-grid" style="margin-top: 10px;">
                     <div class="video-container">
-                        <video src="assets/gallery-demo.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-vgm.webm<br>File not found. Please check:<br>1. File is in assets/ folder<br>2. Filename is exactly gallery-vgm.webm</div>'"></video>
+                        <video src="assets/gallery-demo.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px;" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-demo.webm<br>File not found</div>'"></video>
                     </div>
                 </div>
+            </section>
+
+            <!-- Comparisons with Carousel -->
+            <section>
+                <h2>Comparisons</h2>
+
+                <h3>Self-Reenactment</h3>
+                <p style="margin-bottom: 20px; color: #4a5568;">
+                    We compare our method with state-of-the-art approaches on self-reenactment tasks. Please click the arrows to view different comparison examples.<br>
+                    In addition to GeoDiff4D, we also present the results of video generation models(Ours VGM-RGB and Ours VGM-Normal) below.
+                </p>
+
+                <div class="carousel-container">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" id="selfCarouselTrack">
+                            <!-- Slide 1 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/self_0.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <!-- 第一行: 2个块 -->
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+
+                                            <!-- 第二行: 3个块 -->
+                                            <div class="overlay-label label-2">Ours (VGM-RGB)</div>
+                                            <div class="overlay-label label-3">Ours (VGM-Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+
+                                            <!-- 第三行: 4个块 -->
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/self_1.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/self_2.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 4 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/self_3.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 5 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/self_4.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-nav">
+                        <button class="carousel-arrow" onclick="moveCarousel('self', -1)">‹</button>
+                        <div class="carousel-dots" id="selfCarouselDots"></div>
+                        <button class="carousel-arrow" onclick="moveCarousel('self', 1)">›</button>
+                    </div>
+                </div>
+
+                <h3>Cross-Identity Reenactment</h3>
+                <p style="margin-bottom: 20px; color: #4a5568;">
+                    For cross-identity reenactment, our geometry-aware approach maintains identity consistency while accurately capturing expression dynamics.<br>
+                    In addition to GeoDiff4D, we also present the results of video generation models(Ours VGM-RGB and Ours VGM-Normal) below.
+                </p>
+
+                <div class="carousel-container">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" id="crossCarouselTrack">
+                            <!-- Slide 1 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/cross_0.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <!-- 第一行: 2个块 -->
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+
+                                            <!-- 第二行: 3个块 -->
+                                            <div class="overlay-label label-2">Ours (VGM-RGB)</div>
+                                            <div class="overlay-label label-3">Ours (VGM-Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+
+                                            <!-- 第三行: 4个块 -->
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/cross_1.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/cross_2.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 4 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/cross_3.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Slide 5 -->
+                            <div class="carousel-item">
+                                <div class="video-with-overlay-labels">
+                                    <div class="video-container-overlay">
+                                        <video src="assets/cross_4.webm" autoplay loop muted playsinline></video>
+                                        <div class="overlay-labels">
+                                            <div class="overlay-label label-0">Reference Image</div>
+                                            <div class="overlay-label label-1">Driving Image</div>
+                                            <div class="overlay-label label-2">Ours (VGM)</div>
+                                            <div class="overlay-label label-3">Ours (Normal)</div>
+                                            <div class="overlay-label label-4">Ours (GeoDiff4D)</div>
+                                            <div class="overlay-label label-5">GAGAvatar</div>
+                                            <div class="overlay-label label-6">Portrait4D-v2</div>
+                                            <div class="overlay-label label-7">LAM</div>
+                                            <div class="overlay-label label-8">CAP4D</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-nav">
+                        <button class="carousel-arrow" onclick="moveCarousel('cross', -1)">‹</button>
+                        <div class="carousel-dots" id="crossCarouselDots"></div>
+                        <button class="carousel-arrow" onclick="moveCarousel('cross', 1)">›</button>
+                    </div>
+                </div>
+
             </section>
 
             <section>
@@ -522,76 +857,11 @@
 
                 <div class="gallery-grid" style="margin-top: 10px;">
                     <div class="video-container">
-                        <video src="assets/exp_enc.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/gallery-vgm.webm<br>File not found. Please check:<br>1. File is in assets/ folder<br>2. Filename is exactly gallery-vgm.webm</div>'"></video>
+                        <video src="assets/exp_enc.webm" autoplay loop muted playsinline style="width: 100%; height: auto; border-radius: 8px;" onerror="this.outerHTML='<div class=\'placeholder\'>Gallery Media: assets/exp_enc.webm<br>File not found</div>'"></video>
                     </div>
                 </div>
 
             </section>
-
-            <!-- Comparisons with Carousel -->
-<!--            <section>-->
-<!--                <h2>Comparisons</h2>-->
-
-<!--                <h3>Self-Reenactment</h3>-->
-<!--                <p style="margin-bottom: 20px; color: #4a5568;">-->
-<!--                    We compare our method with state-of-the-art approaches on self-reenactment tasks. Click the arrows to view different comparison examples.-->
-<!--                </p>-->
-
-<!--                <div class="carousel-container">-->
-<!--                    <div class="carousel-wrapper">-->
-<!--                        <div class="carousel-track" id="selfCarouselTrack">-->
-<!--                            &lt;!&ndash; Carousel Item 1 &ndash;&gt;-->
-<!--                            <div class="carousel-item">-->
-<!--                                <img src="assets/comparison_self_1.png" alt="Self-Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Example 1<br>assets/comparison_self_1.png</div>'">-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Carousel Item 2 &ndash;&gt;-->
-<!--                            <div class="carousel-item">-->
-<!--                                <img src="assets/comparison_self_2.png" alt="Self-Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Example 2<br>assets/comparison_self_2.png</div>'">-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Carousel Item 3 &ndash;&gt;-->
-<!--                            <div class="carousel-item">-->
-<!--                                <img src="assets/comparison_self_3.png" alt="Self-Reenactment Comparison 3" onerror="this.outerHTML='<div class=\'placeholder\'>Self-Reenactment Example 3<br>assets/comparison_self_3.png</div>'">-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Add more items as needed &ndash;&gt;-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="carousel-nav">-->
-<!--                        <button class="carousel-arrow" onclick="moveCarousel('self', -1)">‹</button>-->
-<!--                        <div class="carousel-dots" id="selfCarouselDots"></div>-->
-<!--                        <button class="carousel-arrow" onclick="moveCarousel('self', 1)">›</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!--                <h3>Cross-Identity Reenactment</h3>-->
-<!--                <p style="margin-bottom: 20px; color: #4a5568;">-->
-<!--                    For cross-identity reenactment, our geometry-aware approach maintains identity consistency while accurately capturing expression dynamics.-->
-<!--                </p>-->
-
-<!--                <div class="carousel-container">-->
-<!--                    <div class="carousel-wrapper">-->
-<!--                        <div class="carousel-track" id="crossCarouselTrack">-->
-<!--                            &lt;!&ndash; Carousel Item 1 &ndash;&gt;-->
-<!--                            <div class="carousel-item">-->
-<!--                                <img src="assets/comparison_cross_1.png" alt="Cross-Identity Reenactment Comparison 1" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Example 1<br>assets/comparison_cross_1.png</div>'">-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Carousel Item 2 &ndash;&gt;-->
-<!--                            <div class="carousel-item">-->
-<!--                                <img src="assets/comparison_cross_2.png" alt="Cross-Identity Reenactment Comparison 2" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Example 2<br>assets/comparison_cross_2.png</div>'">-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Carousel Item 3 &ndash;&gt;-->
-<!--                            <div class="carousel-item">-->
-<!--                                <img src="assets/comparison_cross_3.png" alt="Cross-Identity Reenactment Comparison 3" onerror="this.outerHTML='<div class=\'placeholder\'>Cross-Identity Example 3<br>assets/comparison_cross_3.png</div>'">-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Add more items as needed &ndash;&gt;-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="carousel-nav">-->
-<!--                        <button class="carousel-arrow" onclick="moveCarousel('cross', -1)">‹</button>-->
-<!--                        <div class="carousel-dots" id="crossCarouselDots"></div>-->
-<!--                        <button class="carousel-arrow" onclick="moveCarousel('cross', 1)">›</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </section>-->
 
             <!-- Acknowledgements -->
             <section>
@@ -622,21 +892,20 @@
     </footer>
 
     <script>
-        // Carousel state
         const carousels = {
             self: { currentIndex: 0, itemCount: 0 },
             cross: { currentIndex: 0, itemCount: 0 }
         };
 
-        // Initialize carousels
         function initCarousel(type) {
             const track = document.getElementById(`${type}CarouselTrack`);
             const dotsContainer = document.getElementById(`${type}CarouselDots`);
-            const items = track.querySelectorAll('.carousel-item');
 
+            if (!track || !dotsContainer) return;
+
+            const items = track.querySelectorAll('.carousel-item');
             carousels[type].itemCount = items.length;
 
-            // Create dots
             dotsContainer.innerHTML = '';
             for (let i = 0; i < items.length; i++) {
                 const dot = document.createElement('button');
@@ -649,58 +918,54 @@
             updateCarousel(type);
         }
 
-        // Move carousel
         function moveCarousel(type, direction) {
             const state = carousels[type];
-            state.currentIndex += direction;
+            let newIndex = state.currentIndex + direction;
 
-            // Loop around
-            if (state.currentIndex < 0) {
-                state.currentIndex = state.itemCount - 1;
-            } else if (state.currentIndex >= state.itemCount) {
-                state.currentIndex = 0;
+            if (newIndex >= state.itemCount) {
+                newIndex = 0;
+            } else if (newIndex < 0) {
+                newIndex = state.itemCount - 1;
             }
 
+            state.currentIndex = newIndex;
             updateCarousel(type);
         }
 
-        // Go to specific slide
         function goToSlide(type, index) {
             carousels[type].currentIndex = index;
             updateCarousel(type);
         }
 
-        // Update carousel position and dots
         function updateCarousel(type) {
             const state = carousels[type];
             const track = document.getElementById(`${type}CarouselTrack`);
             const dots = document.querySelectorAll(`#${type}CarouselDots .carousel-dot`);
 
-            // Move track
+            if (!track) return;
+
             track.style.transform = `translateX(-${state.currentIndex * 100}%)`;
 
-            // Update dots
             dots.forEach((dot, index) => {
                 dot.classList.toggle('active', index === state.currentIndex);
             });
         }
 
-        // Initialize both carousels on page load
         document.addEventListener('DOMContentLoaded', () => {
             initCarousel('self');
             initCarousel('cross');
+
+            const videos = document.querySelectorAll('video[src]');
+            videos.forEach(video => {
+                video.load();
+            });
         });
 
-        // Optional: Add keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') {
-                // Move both carousels left
                 moveCarousel('self', -1);
-                moveCarousel('cross', -1);
             } else if (e.key === 'ArrowRight') {
-                // Move both carousels right
                 moveCarousel('self', 1);
-                moveCarousel('cross', 1);
             }
         });
     </script>
