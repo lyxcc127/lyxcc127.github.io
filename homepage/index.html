@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chao Xu's Homepage</title>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      font-size: clamp(14px, 1.1vw, 18px);
+      --cream: #f3f2ee;
+      --ink: #1a1a18;
+      --rust: #b5451b;
+      --muted: #6b6660;
+      --line: #d6cfc6;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'EB Garamond', Georgia, serif;
+      line-height: 1.75;
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-end;
+      gap: 2.5rem;
+      padding: 1.2rem 4vw;
+      background: var(--cream);
+      border-bottom: 1px solid var(--line);
+    }
+    nav a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--rust); }
+    main {
+      max-width: min(65vw, 1000px);
+      margin: 0 auto;
+      padding: 0 2rem 6rem;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3rem;
+      align-items: end;
+      padding: 9rem 0 4rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-text h1 {
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.4rem;
+    }
+    .hero-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.7rem;
+      cursor: pointer;
+    }
+    .hero-email span.addr {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.92rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      border-bottom: 1px dashed var(--line);
+      padding-bottom: 1px;
+      transition: color 0.2s;
+    }
+    .hero-email svg {
+      color: var(--line);
+      flex-shrink: 0;
+      transition: color 0.2s;
+      margin-bottom: 1px;
+    }
+    .hero-email:hover span.addr,
+    .hero-email:hover svg { color: var(--rust); }
+    .email-tooltip {
+      display: none;
+      position: absolute;
+      left: 0; top: -1.8rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      background: var(--ink);
+      color: var(--cream);
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+    }
+    .hero-photo {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      visibility: hidden;
+    }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; }
+    section { padding: 4rem 0; }
+    #biography { border-bottom: 1px solid var(--line); }
+    #publications { border-bottom: 1px solid var(--line); }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .bio-body p {
+      max-width: 100%;
+      color: #2c2b28;
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+    .bio-links {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+    }
+    .bio-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.76rem;
+      color: var(--rust);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rust);
+      padding-bottom: 1px;
+      letter-spacing: 0.05em;
+      transition: opacity 0.2s;
+    }
+    .bio-links a:hover { opacity: 0.65; }
+    .bio-links a.disabled {
+      color: #cbc6c1;
+      border-bottom-color: #cbc6c1;
+      cursor: default;
+      pointer-events: none;
+    }
+    .pub-list { display: flex; flex-direction: column; }
+    .pub-item {
+      padding: 1.8rem 0;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 3.5rem 1fr;
+      gap: 1rem;
+      align-items: start;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .pub-item.visible { opacity: 1; transform: none; }
+    .pub-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.82rem;
+      color: var(--muted);
+      padding-top: 0.5rem;
+    }
+    .pub-title {
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 1.0rem;
+      font-weight: 600;
+      line-height: 1.55;
+      margin-bottom: 0.45rem;
+    }
+    .pub-authors {
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 0.82rem;
+      color: var(--ink);
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 0.35rem;
+    }
+    .pub-venue {
+      font-family: Verdana, Geneva, sans-serif;
+      font-size: 0.82rem;
+      color: var(--rust);
+      font-style: normal;
+    }
+    .pub-links { display: flex; gap: 0.75rem; margin-top: 0.7rem; }
+    .pub-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--line);
+      padding: 0.15rem 0.65rem;
+      border-radius: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .pub-links a.active { color: var(--muted); }
+    .pub-links a.active:hover { color: var(--rust); border-color: var(--rust); }
+    .pub-links a.disabled {
+      color: #cbc6c1;
+      border-color: #e2ddd8;
+      cursor: default;
+      pointer-events: none;
+    }
+    footer {
+      padding-top: 3rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .hero { opacity: 0; animation: fadeUp 0.8s 0.1s ease forwards; }
+    #biography { opacity: 0; animation: fadeUp 0.7s 0.3s ease forwards; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.5vw; gap: 1.5rem; }
+      main { max-width: 100%; padding: 0 1.2rem 4rem; }
+      .hero { grid-template-columns: 1fr; padding-top: 7rem; }
+      .hero-photo { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#biography">Biography</a>
+  <a href="#publications">Publications</a>
+</nav>
+
+<main>
+
+  <div class="hero">
+    <div class="hero-text">
+      <!-- Affiliation: uncomment and fill in when you have one -->
+      <!-- <div style="font-family:'DM Mono',monospace;font-size:0.78rem;color:var(--rust);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.4rem;">Your University · Department</div> -->
+      <h1>Chao Xu <span style="font-size:0.6em; font-weight:600; color:var(--muted); letter-spacing:0.05em; font-family:Verdana, Geneva, sans-serif;">许超</span></h1>
+      <div style="position:relative; display:inline-block;">
+        <div class="hero-email" onclick="copyEmail()" id="email-wrap">
+          <span class="addr" id="email-addr">lyxc127@outlook.com</span>
+          <svg id="email-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </div>
+        <span class="email-tooltip" id="email-tooltip">Copied!</span>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <!-- <img src="photo.jpg" alt="Chao Xu"> -->
+    </div>
+  </div>
+
+  <section id="biography">
+    <div class="section-label">Biography</div>
+    <div class="bio-body">
+      <p>
+        I am currently an intern at Tsinghua University, advised by <a href="https://openreview.net/profile?id=%7EYebin_Liu1" target="_blank" style="color:var(--rust); text-decoration:none; border-bottom:1px solid var(--rust); padding-bottom:1px; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='1'">Prof. Yebin Liu</a>.
+        I received my B.E. from Northeastern University (Shenyang, China) and my M.E. from Huazhong University of Science and Technology, advised by <a href="https://en-aia.hust.edu.cn/info/1030/1207.htm" target="_blank" style="color:var(--rust); text-decoration:none; border-bottom:1px solid var(--rust); padding-bottom:1px; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='1'">Prof. Delie Ming</a>.
+      </p>
+      <p>
+        My current work focuses on leveraging diffusion models to enhance 3D reconstruction. My research interests include head avatars, 3D reconstruction, and 3D generation.
+      </p>
+      <p>
+        I am actively seeking PhD opportunities. If you have openings related to avatars, 3D reconstruction, 3D generation, or 3D scene understanding and interaction, feel free to reach out by
+        <span onclick="copyEmail()" style="cursor:pointer; border-bottom:1px dashed var(--line); padding-bottom:1px; transition:color 0.2s; white-space:nowrap;"
+          onmouseover="this.style.color='var(--rust)'"
+          onmouseout="this.style.color=''">email
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-left:2px; margin-bottom:2px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </span>.
+      </p>
+      <div class="bio-links">
+        <a href="https://github.com/lyxcc127?tab=repositories" target="_blank">GitHub</a>
+<!--        <a class="disabled">Google Scholar</a>-->
+        <a class="disabled">CV</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="publications">
+    <div class="section-label">Publications</div>
+    <div class="pub-list">
+
+      <div class="pub-item">
+        <div class="pub-year">2026</div>
+        <div>
+          <div class="pub-title">GeoDiff4D: Geometry-Aware Diffusion for 4D Head Avatar Reconstruction</div>
+          <div class="pub-authors"><strong>Chao Xu</strong>, Xiaochen Zhao, Xiang Deng, Jingxiang Sun, Donglin Di, Zhuo Su, Yebin Liu</div>
+          <div class="pub-venue">CVPR 2026</div>
+          <div class="pub-links">
+            <a href="https://arxiv.org/abs/2602.24161" target="_blank" class="active">arXiv</a>
+            <a href="https://lyxcc127.github.io/geodiff4d/" target="_blank" class="active">Project Page</a>
+            <a href="https://github.com/lyxcc127/GeoDiff4D" target="_blank" class="active">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2025</div>
+        <div>
+          <div class="pub-title">Stereo-Talker: Audio-driven 3D Human Synthesis with Prior-Guided Mixture-of-Experts</div>
+          <div class="pub-authors">Xiang Deng*, Youxin Pang*, Xiaochen Zhao*, <strong>Chao Xu</strong>, Lizhen Wang, Hongjiang Xiao, Shi Yan, Hongwen Zhang, Yebin Liu</div>
+          <div class="pub-venue">TPAMI</div>
+          <div class="pub-links">
+            <a href="https://arxiv.org/abs/2410.23836" target="_blank" class="active">Arxiv</a>
+            <a href="https://github.com/Xiang-Deng00/stereo-talker.github.io" target="_blank" class="active">Project Page</a>
+            <a href="#" target="_blank" class="disabled">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2024</div>
+        <div>
+          <div class="pub-title">MeshAvatar: Learning High-Quality Triangular Human Avatars from Multi-view Videos</div>
+          <div class="pub-authors">Yushuo Chen, Zerong Zheng, Zhe Li, <strong>Chao Xu</strong>, Yebin Liu</div>
+          <div class="pub-venue">ECCV 2024</div>
+          <div class="pub-links">
+            <a href="https://arxiv.org/abs/2407.08414" target="_blank" class="active">arXiv</a>
+            <a href="https://shad0wta9.github.io/meshavatar-page/" target="_blank" class="active">Project Page</a>
+            <a href="https://github.com/shad0wta9/meshavatar" target="_blank" class="active">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pub-item">
+        <div class="pub-year">2024</div>
+        <div>
+          <div class="pub-title">RAM-Avatar: Real-time Photo-Realistic Avatar from Monocular Videos with Full-body Control</div>
+          <div class="pub-authors">Xiang Deng, Zerong Zheng, Yuxiang Zhang, Jingxiang Sun, <strong>Chao Xu</strong>, Xiaodong Yang, Lizhen Wang, Yebin Liu</div>
+          <div class="pub-venue">CVPR 2024</div>
+          <div class="pub-links">
+            <a href="https://openaccess.thecvf.com/content/CVPR2024/papers/Deng_RAM-Avatar_Real-time_Photo-Realistic_Avatar_from_Monocular_Videos_with_Full-body_Control_CVPR_2024_paper.pdf" target="_blank" class="active">Paper</a>
+            <a href="#" class="disabled">Project Page</a>
+            <a href="https://github.com/Xiang-Deng00/RAM-Avatar" target="_blank" class="active">GitHub</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Chao Xu · Last updated February 2026
+  </footer>
+
+</main>
+
+<script>
+  const items = document.querySelectorAll('.pub-item');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  items.forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.07}s`;
+    observer.observe(el);
+  });
+
+  function copyEmail() {
+    navigator.clipboard.writeText('lyxc127@outlook.com').then(() => {
+      const tooltip = document.getElementById('email-tooltip');
+      const icon = document.getElementById('email-icon');
+      icon.innerHTML = '<polyline points="20 6 9 17 4 12"/>';
+      icon.style.color = 'var(--rust)';
+      document.getElementById('email-addr').style.color = 'var(--rust)';
+      tooltip.style.display = 'block';
+      setTimeout(() => {
+        tooltip.style.display = 'none';
+        icon.innerHTML = '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>';
+        icon.style.color = 'var(--line)';
+        document.getElementById('email-addr').style.color = 'var(--muted)';
+      }, 1500);
+    });
+  }
+
+  const emailWrap = document.getElementById('email-wrap');
+  emailWrap.addEventListener('mouseover', () => {
+    document.getElementById('email-addr').style.color = 'var(--rust)';
+    document.getElementById('email-icon').style.color = 'var(--rust)';
+  });
+  emailWrap.addEventListener('mouseout', () => {
+    document.getElementById('email-addr').style.color = 'var(--muted)';
+    document.getElementById('email-icon').style.color = 'var(--line)';
+  });
+</script>
+
+</body>
+</html>
